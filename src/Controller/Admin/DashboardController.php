@@ -6,6 +6,9 @@ use App\Entity\User;
 use App\Entity\Topic;
 use App\Entity\Answer;
 use App\Entity\Question;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -53,5 +56,12 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('topics', 'fa fa-folder', Topic::class);
         yield MenuItem::linkToCrud('Users', 'fa fa-users', User::class);
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
+    }
+
+    public function configureActions(): Actions
+    {
+        return parent::configureActions()
+            ->add(Crud::PAGE_INDEX, Action::DETAIL);
+        
     }
 }
