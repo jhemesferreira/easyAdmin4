@@ -1,4 +1,4 @@
-##useful tips
+## Useful tips
 
 1- Install easyAdmin 4 = composer require admin
 2- Make a dashboard = symfony console make:admin:dashboard
