@@ -3,6 +3,10 @@
 Well hi there! This repository holds the code and script
 for the EasyAdminBundle tutorial on SymfonyCasts.
 
+## Useful tips
+
+See [doc Useful tips](./documents/USEFUL_TIPS.md)
+
 ## Setup
 
 If you've just downloaded the code, congratulations!!
