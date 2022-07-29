@@ -16,6 +16,12 @@ use Symfony\Component\Security\Core\User\UserInterface;
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use TimestampableEntity;
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+    const ROLES_AVAILABLES = [
+        self::ROLE_SUPER_ADMIN => 'Super Admin',
+        'ROLE_ADMIN' => 'Admin',
+        'ROLE_USER' => 'User'
+    ];
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -159,7 +165,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-         $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function isEnabled(): bool
