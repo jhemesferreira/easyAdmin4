@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use Faker\Core\File;
 use App\Entity\Question;
+use App\EasyAdmin\VotesField;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
@@ -30,13 +31,13 @@ class QuestionCrudController extends AbstractCrudController
                 ->hideOnForm(),
             Field::new('name'),
             SlugField::new('slug')
-            ->hideOnIndex()
-            ->setTargetFieldName('name')
-            ->setFormTypeOptions(['disabled' => $pageName !== Crud::PAGE_NEW]),
+                ->hideOnIndex()
+                ->setTargetFieldName('name')
+                ->setFormTypeOptions(['disabled' => $pageName !== Crud::PAGE_NEW]),
             TextareaField::new('question', 'Question.Admin.Form.Question.label')
                 ->hideOnIndex(),
             AssociationField::new('topic'),
-            Field::new('votes', 'Question.Admin.Form.TotalVotes.label')
+            VotesField::new('votes', 'Question.Admin.Form.TotalVotes.label')
                 ->setHelp('Question.Admin.Form.TotalVotes.Help')
                 ->setTextAlign('center'),
             AssociationField::new('askedBy')
