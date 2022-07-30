@@ -1,0 +1,10 @@
+Question:
+  Admin:
+    Form:
+      TotalVotes: 
+        label: "Total votes"
+        Help: "This is un exemple..."
+      CratedAt:
+        label: "Created at"
+      Question:
+        label: "Question"
