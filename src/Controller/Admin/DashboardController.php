@@ -51,6 +51,14 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('Cauldron Overflow Admin');
     }
 
+    public function configureCrud(): Crud
+    {
+        return parent::configureCrud()
+            ->setDefaultSort([
+                'id'=> 'DESC'
+            ]);
+    }
+
     public function configureMenuItems(): iterable
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-dashboard');

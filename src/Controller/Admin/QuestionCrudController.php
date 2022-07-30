@@ -29,7 +29,8 @@ class QuestionCrudController extends AbstractCrudController
         return [
             IdField::new('id')
                 ->hideOnForm(),
-            Field::new('name'),
+            Field::new('name')
+            ->setSortable(false),
             SlugField::new('slug')
                 ->hideOnIndex()
                 ->setTargetFieldName('name')
@@ -59,5 +60,15 @@ class QuestionCrudController extends AbstractCrudController
             Field::new('createdAt', 'Question.Admin.Form.CratedAt.label')
             ->hideOnForm()
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setDefaultSort([
+                'askedBy.enabled' => 'DESC',
+                'createdAt' => 'DESC'
+            ])
+            ->showEntityActionsInlined();
     }
 }
