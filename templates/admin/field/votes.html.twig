@@ -1,0 +1,6 @@
+{# @var ea \EasyCorp\Bundle\EasyAdminBundle\Context\AdminContext #}
+{# @var field \EasyCorp\Bundle\EasyAdminBundle\Dto\FieldDto #}
+{# @var entity \EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto #}
+
+<i class="{{ field.value >= 0 ? 'fas fa-thumbs-up text-success' : 'fas fa-thumbs-down text-danger' }}"></i>
+{{ field.formattedValue }}
