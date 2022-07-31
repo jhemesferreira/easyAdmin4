@@ -6,6 +6,8 @@ use Faker\Core\File;
 use App\Entity\Question;
 use App\EasyAdmin\VotesField;
 use Doctrine\ORM\QueryBuilder;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -70,5 +72,18 @@ class QuestionCrudController extends AbstractCrudController
                 'createdAt' => 'DESC'
             ])
             ->showEntityActionsInlined();
+    }
+
+    public function configureActions(Actions $actions): Actions
+    {
+        return parent::configureActions($actions)
+            ->setPermissions([
+                Action::INDEX => 'ROLE_MODERATOR',
+                Action::DETAIL => 'ROLE_MODERATOR',
+                Action::EDIT => 'ROLE_MODERATOR',
+                Action::NEW => 'ROLE_SUPER_ADMIN',
+                Action::DELETE => 'ROLE_SUPER_ADMIN',
+                Action::BATCH_DELETE => 'ROLE_SUPER_ADMIN'
+            ]);
     }
 }
