@@ -3,6 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -31,8 +32,8 @@ class UserCrudController extends AbstractCrudController
             IdField::new('id')
                 ->hideOnForm(),
                 AvatarField::new('avatar')
-                ->formatValue(static function ($value, User $user) {
-                    return $user->getAvatarUrl();
+                ->formatValue(static function ($value, ?User $user) {
+                    return $user?->getAvatarUrl();
                 })
                 ->hideOnForm(),
             ImageField::new('avatar')
@@ -59,5 +60,11 @@ class UserCrudController extends AbstractCrudController
                 ->renderAsBadges(),
             // TextEditorField::new('description'),
         ];
+    }
+
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setEntityPermission('ADMIN_USER_EDIT');
     }
 }

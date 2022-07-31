@@ -44,11 +44,12 @@ class QuestionCrudController extends AbstractCrudController
             AssociationField::new('topic'),
             VotesField::new('votes', 'Question.Admin.Form.TotalVotes.label')
                 ->setHelp('Question.Admin.Form.TotalVotes.Help')
-                ->setTextAlign('center'),
+                ->setTextAlign('center')
+                ->setPermission('ROLE_SUPER_ADMIN'),
             AssociationField::new('askedBy')
                 ->autocomplete()
-                ->formatValue(static function ($value, Question $question) {
-                    if (!$user = $question->getAskedBy()) {
+                ->formatValue(static function ($value, ?Question $question) {
+                    if (!$user = $question?->getAskedBy()) {
                         return null;
                     }
                     // !!!Attention: when we rende things in EasyAdmin, we can include HTML in most situations...
