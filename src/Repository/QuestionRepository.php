@@ -38,9 +38,9 @@ class QuestionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-     /**
-      * @return Question[] Returns an array of Question objects
-      */
+    /**
+     * @return Question[] Returns an array of Question objects
+     */
     public function findAllApprovedOrderedByNewest()
     {
         return $this->addIsApprovedQueryBuilder()
