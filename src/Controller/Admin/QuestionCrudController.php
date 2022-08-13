@@ -2,24 +2,26 @@
 
 namespace App\Controller\Admin;
 
+use App\Entity\User;
 use Faker\Core\File;
 use App\Entity\Question;
 use App\EasyAdmin\VotesField;
 use Doctrine\ORM\QueryBuilder;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use Doctrine\ORM\EntityManagerInterface;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
-use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
-use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 
 #[IsGranted('ROLE_MODERATOR')]
 class QuestionCrudController extends AbstractCrudController
@@ -94,5 +96,17 @@ class QuestionCrudController extends AbstractCrudController
                 Action::DELETE => 'ROLE_SUPER_ADMIN',
                 Action::BATCH_DELETE => 'ROLE_SUPER_ADMIN'
             ]);
+    }
+
+    public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
+    {
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw new \LogicException('Currently logged in user is not an instance of User?!');
+        }
+
+        $entityInstance->setUpdatedBy($user);
+        parent::updateEntity($entityManager, $entityInstance);
     }
 }
