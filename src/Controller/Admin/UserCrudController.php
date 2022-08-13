@@ -3,10 +3,15 @@
 namespace App\Controller\Admin;
 
 use App\Entity\User;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
+use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
+use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\SearchDto;
+use EasyCorp\Bundle\EasyAdminBundle\Dto\EntityDto;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AvatarField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -21,7 +26,26 @@ class UserCrudController extends AbstractCrudController
         return User::class;
     }
 
-    
+    public function configureCrud(Crud $crud): Crud
+    {
+        return parent::configureCrud($crud)
+            ->setEntityPermission('ADMIN_USER_EDIT');
+    }
+
+    public function createIndexQueryBuilder(SearchDto $searchDto, EntityDto $entityDto, FieldCollection $fields, FilterCollection $filters): QueryBuilder
+    {
+        $queryBuild = parent::createIndexQueryBuilder($searchDto, $entityDto, $fields, $filters);
+
+        if ($this->isGranted(user::ROLE_SUPER_ADMIN)) {
+            return $queryBuild;
+        }
+
+        $queryBuild
+            ->andWhere('entity.id = :id')
+            ->setParameter('id', $this->getUser()->getId());
+
+        return $queryBuild;
+    }
     public function configureFields(string $pageName): iterable
     {
         $roles = User::ROLES_AVAILABLES;
@@ -60,11 +84,5 @@ class UserCrudController extends AbstractCrudController
                 ->renderAsBadges(),
             // TextEditorField::new('description'),
         ];
-    }
-
-    public function configureCrud(Crud $crud): Crud
-    {
-        return parent::configureCrud($crud)
-            ->setEntityPermission('ADMIN_USER_EDIT');
     }
 }
