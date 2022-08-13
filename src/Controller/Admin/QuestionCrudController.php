@@ -66,6 +66,8 @@ class QuestionCrudController extends AbstractCrudController
                 ->setFormTypeOptions(['by_reference' => false ]),
             Field::new('createdAt', 'Question.Admin.Form.CratedAt.label')
             ->hideOnForm(),
+            AssociationField::new('updatedBy')
+                ->onlyOnDetail(),
             BooleanField::new('isApproved')
                 ->renderAsSwitch(false)
         ];
