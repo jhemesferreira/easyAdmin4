@@ -17,6 +17,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
+use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 
 #[IsGranted('ROLE_MODERATOR')]
@@ -27,7 +29,7 @@ class QuestionCrudController extends AbstractCrudController
         return Question::class;
     }
 
-    
+
     public function configureFields(string $pageName): iterable
     {
         return [
@@ -63,7 +65,9 @@ class QuestionCrudController extends AbstractCrudController
                 ->autocomplete()
                 ->setFormTypeOptions(['by_reference' => false ]),
             Field::new('createdAt', 'Question.Admin.Form.CratedAt.label')
-            ->hideOnForm()
+            ->hideOnForm(),
+            BooleanField::new('isApproved')
+                ->renderAsSwitch(false)
         ];
     }
 

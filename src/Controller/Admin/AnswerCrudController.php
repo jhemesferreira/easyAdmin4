@@ -2,8 +2,9 @@
 
 namespace App\Controller\Admin;
 
-use App\EasyAdmin\VotesField;
 use App\Entity\Answer;
+use App\EasyAdmin\VotesField;
+use App\Controller\Admin\QuestionCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -27,6 +28,9 @@ class AnswerCrudController extends AbstractCrudController
             VotesField::new('votes')
                 ->setTemplatePath('admin/field/votes.html.twig'),
             AssociationField::new('question')
+                ->autocomplete()
+                //Attention : it's to prevent that Ajax request be made QuestionPendingApprovalCrudController
+                ->setCrudController(QuestionCrudController::class)
                 ->hideOnIndex(),
             AssociationField::new('answeredBy'),
             Field::new('createdAt')
