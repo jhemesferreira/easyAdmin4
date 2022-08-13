@@ -7,6 +7,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Collection\FieldCollection;
 use EasyCorp\Bundle\EasyAdminBundle\Collection\FilterCollection;
 use Doctrine\ORM\QueryBuilder;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
@@ -18,6 +19,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\EmailField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
+use EasyCorp\Bundle\EasyAdminBundle\Filter\BooleanFilter;
 
 class UserCrudController extends AbstractCrudController
 {
@@ -46,6 +48,7 @@ class UserCrudController extends AbstractCrudController
 
         return $queryBuild;
     }
+
     public function configureFields(string $pageName): iterable
     {
         $roles = User::ROLES_AVAILABLES;
@@ -71,7 +74,7 @@ class UserCrudController extends AbstractCrudController
                 ->onlyOnForms(),
             TextField::new('firstName')
                 ->onlyOnForms(),
-            
+
             EmailField::new('email'),
             BooleanField::new('enabled')
                 ->renderAsSwitch(false),
@@ -84,5 +87,11 @@ class UserCrudController extends AbstractCrudController
                 ->renderAsBadges(),
             // TextEditorField::new('description'),
         ];
+    }
+
+    public function configureFilters(Filters $filters): Filters
+    {
+        return parent::configureFilters($filters)
+            ->add(BooleanFilter::new('enabled')->setFormTypeOption('expanded', false));
     }
 }
