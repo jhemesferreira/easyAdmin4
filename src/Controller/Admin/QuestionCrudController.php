@@ -87,6 +87,21 @@ class QuestionCrudController extends AbstractCrudController
 
     public function configureActions(Actions $actions): Actions
     {
+        // return function allows to customize action on different page...
+        $viewAction = function() {
+            return Action::new('view')
+            // ->linkToRoute() -> that would generate a URL through the admin section
+            ->linkToUrl(fn (Question $question) => $this->generateUrl('app_question_show', [
+                'slug' => $question->getSlug()
+            ]))
+            ->setLabel('View on site');
+        };
+        // !!! Attention
+        // ->linkToUrl(
+        // print args inside function
+        //     fn (Question $question) =>
+        //     dd(func_get_args())
+        // );
         return parent::configureActions($actions)
             ->setPermissions([
                 Action::INDEX => 'ROLE_MODERATOR',
@@ -95,7 +110,9 @@ class QuestionCrudController extends AbstractCrudController
                 Action::NEW => 'ROLE_SUPER_ADMIN',
                 Action::DELETE => 'ROLE_SUPER_ADMIN',
                 Action::BATCH_DELETE => 'ROLE_SUPER_ADMIN'
-            ]);
+            ])
+            ->add(Crud::PAGE_INDEX, $viewAction())
+            ->add(Crud::PAGE_EDIT, $viewAction()->addCssClass('btn btn-success')->setIcon('fa fa-eye'));
     }
 
     public function updateEntity(EntityManagerInterface $entityManager, $entityInstance): void
